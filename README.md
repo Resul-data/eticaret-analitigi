@@ -2,6 +2,12 @@
 
 Sentetik e-ticaret hareketlerini gerçek zamanlı işleyen bir Python projesi. Ürün görüntüleme, tıklama ve sepete ekleme olayları Redpanda üzerinden ClickHouse'a aktarılır. ClickHouse sorguları terminalde canlı rapor üretir. Ayrı bir Random Forest denemesi MLflow ile takip edilir.
 
+## Canlı analiz demosu
+
+Bu 24 saniyelik temsili animasyon, bir sepete ekleme olayının Redpanda üzerinden ClickHouse'a yazılmasını ve SQL raporuna yansımasını gösterir.
+
+![Bir sepete ekleme olayının Producer, Redpanda, Consumer ve ClickHouse üzerinden canlı SQL raporuna ilerleyişi](docs/canli-analitik-demo.gif)
+
 ```mermaid
 flowchart TD
     A["producer.py"] --> B["Redpanda · user-clicks"]
