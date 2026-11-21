@@ -1,0 +1,8 @@
+clickhouse-connect
+clickhouse-driver
+kafka-python
+python-dotenv
+mlflow==3.17.2
+pandas==2.2.2
+scikit-learn==1.9.1
+skops==0.16.0

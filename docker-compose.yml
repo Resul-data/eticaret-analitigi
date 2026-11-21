@@ -1,0 +1,41 @@
+services:
+  # 1. Canlı Veri Kuyruğu
+  redpanda:
+    image: docker.io/redpandadata/redpanda:v23.2.1
+    command:
+      - redpanda start
+      - --smp 1
+      - --overprovisioned
+      - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:19092
+      - --advertise-kafka-addr internal://redpanda:9092,external://localhost:19092
+    ports:
+      - "127.0.0.1:19092:19092"
+
+  # Redpanda Arayüzü
+  console:
+    image: docker.io/redpandadata/console:v2.3.1
+    entrypoint: /bin/sh
+    command: -c "echo \"$$CONSOLE_CONFIG_FILE\" > /tmp/config.yml; /app/console"
+    environment:
+      CONFIG_FILEPATH: /tmp/config.yml
+      CONSOLE_CONFIG_FILE: |
+        kafka:
+          brokers: ["redpanda:9092"]
+    ports:
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      - redpanda
+
+  # 2. Analitik Veri Tabanı
+  clickhouse:
+    image: docker.io/clickhouse/clickhouse-server:latest
+    ports:
+      - "127.0.0.1:8123:8123"
+      - "127.0.0.1:9000:9000"
+    environment:
+      - CLICKHOUSE_USER=default
+      - CLICKHOUSE_PASSWORD=${CLICKHOUSE_PASSWORD:?CLICKHOUSE_PASSWORD değerini .env dosyasında ayarlayın}
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
